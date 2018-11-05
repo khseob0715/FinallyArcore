@@ -50,6 +50,7 @@ namespace GoogleARCore.Examples.HelloAR
         /// A model to place when a raycast from a user touch hits a plane.
         /// </summary>
         public GameObject AndyPlanePrefab;
+        public GameObject AgentObjcet;
 
         /// <summary>
         /// A model to place when a raycast from a user touch hits a feature point.
@@ -61,6 +62,14 @@ namespace GoogleARCore.Examples.HelloAR
         /// </summary>
         public GameObject SearchingForPlaneUI;
         public GameObject SearchingText;
+        public GameObject NextButtonUI;
+        public GameObject VRagentUI;
+        public GameObject ClimbingUI;
+
+        public Sprite ClimbingImage;
+        public Sprite ClimbingImage2;
+        private int ClimbingSpriteImageChange = 0;
+        private int ClimbingCount = 0;
 
         /// <summary>
         /// The rotation in degrees need to apply to model when the Andy model is placed.
@@ -80,9 +89,19 @@ namespace GoogleARCore.Examples.HelloAR
 
         public string[] Description;
         private int Description_index = 0;
+        public int[] ButtonShow;
+
+        private bool once = false;
         /// <summary>
         /// The Unity Update() method.
         /// </summary>
+        /// 
+        public void Start()
+        {
+            VRagentUI.SetActive(false);
+            ClimbingUI.SetActive(false);
+        }
+
         public void Update()
         {
             _UpdateApplicationLifecycle();
@@ -94,7 +113,8 @@ namespace GoogleARCore.Examples.HelloAR
             {
                 if (m_AllPlanes[i].TrackingState == TrackingState.Tracking)
                 {
-                   // showSearchingUI = false;
+                    // showSearchingUI = false;
+                    NextButton();
                     break;
                 }
             }
@@ -125,31 +145,46 @@ namespace GoogleARCore.Examples.HelloAR
                 }
                 else
                 {
-                    // Choose the Andy model for the Trackable that got hit.
-                    GameObject prefab;
-                    if (hit.Trackable is FeaturePoint)
+
+                    if (!once)
                     {
-                        //    prefab = AndyPointPrefab;
-                        prefab = AndyPlanePrefab;
+                        // Choose the Andy model for the Trackable that got hit.
+                        GameObject prefab;
+                        if (hit.Trackable is FeaturePoint)
+                        {
+                            //    prefab = AndyPointPrefab;
+                            prefab = AndyPlanePrefab;
+                        }
+                        else
+                        {
+                            prefab = AndyPlanePrefab;
+                        }
+
+                        // Instantiate Andy model at the hit pose.
+                        var andyObject = Instantiate(prefab, hit.Pose.position, hit.Pose.rotation);
+
+                        // Compensate for the hitPose rotation facing away from the raycast (i.e. camera).
+                        andyObject.transform.Rotate(0, k_ModelRotation, 0, Space.Self);
+
+                        // Create an anchor to allow ARCore to track the hitpoint as understanding of the physical
+                        // world evolves.
+                        var anchor = hit.Trackable.CreateAnchor(hit.Pose);
+
+                        // Make Andy model a child of the anchor.
+                        andyObject.transform.parent = anchor.transform;
+                        once = true;
+                        NextButton();
                     }
-                    else
-                    {
-                        prefab = AndyPlanePrefab;
-                    }
-
-                    // Instantiate Andy model at the hit pose.
-                    var andyObject = Instantiate(prefab, hit.Pose.position, hit.Pose.rotation);
-
-                    // Compensate for the hitPose rotation facing away from the raycast (i.e. camera).
-                    andyObject.transform.Rotate(0, k_ModelRotation, 0, Space.Self);
-
-                    // Create an anchor to allow ARCore to track the hitpoint as understanding of the physical
-                    // world evolves.
-                    var anchor = hit.Trackable.CreateAnchor(hit.Pose);
-
-                    // Make Andy model a child of the anchor.
-                    andyObject.transform.parent = anchor.transform;
                 }
+            }
+
+            if (ButtonShow[Description_index] == 1)
+            {
+                NextButtonUI.SetActive(true);
+            }
+            else
+            {
+                NextButtonUI.SetActive(false);
             }
         }
 
@@ -198,10 +233,52 @@ namespace GoogleARCore.Examples.HelloAR
         public void NextButton()
         {
             Description_index++;
+            if(Description_index == 4) // 가상 캐릭터 버튼 활성화 
+            {
+                VRagentUI.SetActive(true);
+            }
             SearchingText.GetComponent<Text>().text = Description[Description_index];
         }
 
 
+        public void CreateAgent()
+        {
+            VRagentUI.SetActive(false);
+            AgentObjcet.SetActive(true);
+            ClimbingUI.SetActive(true);
+            NextButton();
+            // Agent 생성하고 다음으로 넘기고 버튼 없애고 
+        }
+
+        public void ClimbingButton()
+        {
+            if(ClimbingSpriteImageChange == 0) {
+                ClimbingUI.GetComponent<Image>().sprite = ClimbingImage2;
+                ClimbingSpriteImageChange = 1;
+            }
+            else
+            {
+                ClimbingUI.GetComponent<Image>().sprite = ClimbingImage;
+                ClimbingSpriteImageChange = 0;
+            }
+            
+            if(ClimbingCount == 10)
+            {
+                NextButton();
+            }
+            else if (ClimbingCount == 20)
+            {
+                NextButton();
+                // 거인 집 등장!!
+                // 암전 이후 기존 녀석들 Destory 박고. AR portal 호출하자. 
+            }
+            else
+            {
+                ClimbingCount++;
+            }
+
+
+        }
         /// <summary>
         /// Actually quit the application.
         /// </summary>
