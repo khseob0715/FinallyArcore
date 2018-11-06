@@ -92,6 +92,9 @@ namespace GoogleARCore.Examples.HelloAR
         public int[] ButtonShow;
 
         private bool once = false;
+        public bool TrackingStateOnce = false;
+
+        private GameObject andyObject;
         /// <summary>
         /// The Unity Update() method.
         /// </summary>
@@ -109,13 +112,22 @@ namespace GoogleARCore.Examples.HelloAR
             // Hide snackbar when currently tracking at least one plane.
             Session.GetTrackables<DetectedPlane>(m_AllPlanes);
             bool showSearchingUI = true;
-            for (int i = 0; i < m_AllPlanes.Count; i++)
+
+            if (Description_index >= 1)
             {
-                if (m_AllPlanes[i].TrackingState == TrackingState.Tracking)
+                for (int i = 0; i < m_AllPlanes.Count; i++)
                 {
-                    // showSearchingUI = false;
-                    NextButton();
-                    break;
+                    if (m_AllPlanes[i].TrackingState == TrackingState.Tracking)
+                    {
+                        // showSearchingUI = false;
+                        if (TrackingStateOnce == false)
+                        {
+                            NextButton();
+                            TrackingStateOnce = true;
+                        }
+
+                        break;
+                    }
                 }
             }
 
@@ -161,7 +173,7 @@ namespace GoogleARCore.Examples.HelloAR
                         }
 
                         // Instantiate Andy model at the hit pose.
-                        var andyObject = Instantiate(prefab, hit.Pose.position, hit.Pose.rotation);
+                        andyObject = Instantiate(prefab, hit.Pose.position, hit.Pose.rotation);
 
                         // Compensate for the hitPose rotation facing away from the raycast (i.e. camera).
                         andyObject.transform.Rotate(0, k_ModelRotation, 0, Space.Self);
@@ -233,7 +245,7 @@ namespace GoogleARCore.Examples.HelloAR
         public void NextButton()
         {
             Description_index++;
-            if(Description_index == 4) // 가상 캐릭터 버튼 활성화 
+            if (Description_index == 4) // 가상 캐릭터 버튼 활성화 
             {
                 VRagentUI.SetActive(true);
             }
@@ -244,7 +256,8 @@ namespace GoogleARCore.Examples.HelloAR
         public void CreateAgent()
         {
             VRagentUI.SetActive(false);
-            AgentObjcet.SetActive(true);
+            //AgentObjcet.SetActive(true);
+            andyObject.transform.GetChild(1).gameObject.SetActive(true);
             ClimbingUI.SetActive(true);
             NextButton();
             // Agent 생성하고 다음으로 넘기고 버튼 없애고 
@@ -252,7 +265,8 @@ namespace GoogleARCore.Examples.HelloAR
 
         public void ClimbingButton()
         {
-            if(ClimbingSpriteImageChange == 0) {
+            if (ClimbingSpriteImageChange == 0)
+            {
                 ClimbingUI.GetComponent<Image>().sprite = ClimbingImage2;
                 ClimbingSpriteImageChange = 1;
             }
@@ -261,22 +275,27 @@ namespace GoogleARCore.Examples.HelloAR
                 ClimbingUI.GetComponent<Image>().sprite = ClimbingImage;
                 ClimbingSpriteImageChange = 0;
             }
-            
-            if(ClimbingCount == 10)
+            // Climbing Virtual Agent
+            andyObject.transform.GetChild(1).gameObject.transform.position += new Vector3(0,0.1f,0);
+
+
+            if (ClimbingCount == 20)
             {
                 NextButton();
             }
-            else if (ClimbingCount == 20)
+            else if (ClimbingCount == 40)
             {
                 NextButton();
                 // 거인 집 등장!!
                 // 암전 이후 기존 녀석들 Destory 박고. AR portal 호출하자. 
+                gameObject.GetComponent<UIFader>().FadeIn();
             }
             else
             {
                 ClimbingCount++;
             }
 
+            
 
         }
         /// <summary>

@@ -21,6 +21,7 @@
 namespace GoogleARCore.Examples.Common
 {
     using System.Collections.Generic;
+    using GoogleARCore.Examples.HelloAR;
     using GoogleARCore;
     using UnityEngine;
 
@@ -33,6 +34,7 @@ namespace GoogleARCore.Examples.Common
         /// A prefab for tracking and visualizing detected planes.
         /// </summary>
         public GameObject DetectedPlanePrefab;
+        public GameObject HelloAR_ref;
 
         /// <summary>
         /// A list to hold new planes ARCore began tracking in the current frame. This object is used across
@@ -53,7 +55,7 @@ namespace GoogleARCore.Examples.Common
 
             // Iterate over planes found in this frame and instantiate corresponding GameObjects to visualize them.
             Session.GetTrackables<DetectedPlane>(m_NewPlanes, TrackableQueryFilter.New);
-            for (int i = 0; i < m_NewPlanes.Count; i++)
+            for (int i = 0; i < m_NewPlanes.Count && !HelloAR_ref.GetComponent<HelloARController>().TrackingStateOnce; i++)
             {
                 // Instantiate a plane visualization prefab and set it to track the new plane. The transform is set to
                 // the origin with an identity rotation since the mesh for our prefab is updated in Unity World
