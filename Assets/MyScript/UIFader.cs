@@ -15,6 +15,7 @@ public class UIFader : MonoBehaviour
     public void FadeIn()
     {
         StartCoroutine(FadeCanvasGroup(uiElement, uiElement.alpha, 1));
+        
         showToast();
     }
 
@@ -41,7 +42,6 @@ public class UIFader : MonoBehaviour
             cg.alpha = currentValue;
 
             if (percentageComplete >= 1) break;
-
 
             yield return new WaitForEndOfFrame();
         }

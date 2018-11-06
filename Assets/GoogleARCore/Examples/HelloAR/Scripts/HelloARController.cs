@@ -65,6 +65,7 @@ namespace GoogleARCore.Examples.HelloAR
         public GameObject NextButtonUI;
         public GameObject VRagentUI;
         public GameObject ClimbingUI;
+        public GameObject ARPortalObject;
 
         public Sprite ClimbingImage;
         public Sprite ClimbingImage2;
@@ -279,16 +280,24 @@ namespace GoogleARCore.Examples.HelloAR
             andyObject.transform.GetChild(1).gameObject.transform.position += new Vector3(0,0.1f,0);
 
 
-            if (ClimbingCount == 20)
+            if (ClimbingCount == 10)
             {
                 NextButton();
+                ClimbingCount++;
             }
-            else if (ClimbingCount == 40)
+            else if (ClimbingCount == 20)
             {
                 NextButton();
                 // 거인 집 등장!!
                 // 암전 이후 기존 녀석들 Destory 박고. AR portal 호출하자. 
-                gameObject.GetComponent<UIFader>().FadeIn();
+                //gameObject.GetComponent<UIFader>().FadeIn();
+
+                // Instantiate Andy model at the hit pose.
+                GameObject _ARPortalObject = Instantiate(ARPortalObject, andyObject.transform.position, andyObject.transform.rotation);
+
+                Destroy(andyObject);
+                ClimbingUI.SetActive(false);
+
             }
             else
             {
