@@ -4,22 +4,39 @@ using UnityEngine;
 
 public class UpStair : MonoBehaviour {
 
-    private GameObject ARportalObject; 
+    private GameObject ARportalObject;
+    public int level = 0;
 
+    private GameObject TempObject;
 	// Use this for initialization
 	void Start () {
         ARportalObject = GameObject.Find("ARPortalObject(Clone)");
-	}
+        TempObject = GameObject.Find("Temp");
+        // ARportalObject.transform.position -= TempObject.transform.position - ARportalObject.gameObject.transform.GetChild(0).transform.position;
+       
+    }
 	
 	// Update is called once per frame
 	void Update () {
-		
-	}
+
+        
+    }
 
     public void stairTouch()
     {
         //_ShowAndroidToastMessage("Stair");
-        ARportalObject.transform.position = ARportalObject.transform.position - new Vector3(0, 0, 0);
+        // ARportalObject.gameObject.transform.GetChild(0).transform.position;  => movePoint
+        // ar - (movePoint - camera position)
+        if (level == 1)
+        {
+            ARportalObject.transform.position -= new Vector3(1.5f, 0.8f, 0);
+        }
+        else if(level == 2)
+        {
+            ARportalObject.transform.position -=
+                new Vector3(TempObject.transform.position.x - ARportalObject.gameObject.transform.GetChild(1).transform.position.x, ARportalObject.transform.position.y, TempObject.transform.position.z + ARportalObject.gameObject.transform.GetChild(1).transform.position.z);
+        }
+        
     }
 
 

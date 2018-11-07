@@ -67,6 +67,7 @@ namespace GoogleARCore.Examples.HelloAR
         public GameObject ClimbingUI;
         public GameObject ARPortalObject;
         public GameObject JoystickUI;
+        public GameObject GoldUI;
 
         public Sprite ClimbingImage;
         public Sprite ClimbingImage2;
@@ -106,6 +107,7 @@ namespace GoogleARCore.Examples.HelloAR
             VRagentUI.SetActive(false);
             ClimbingUI.SetActive(false);
             JoystickUI.SetActive(false);
+            GoldUI.SetActive(false);
         }
 
         public void Update()

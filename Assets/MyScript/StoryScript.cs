@@ -7,6 +7,7 @@ public class StoryScript : MonoBehaviour {
 
     public GameObject TextGroup;
     private int cur_text_index = 0;
+    public GameObject LoadingText;
 
     private int TextGroup_Size;
     // Use this for initialization
@@ -14,6 +15,7 @@ public class StoryScript : MonoBehaviour {
     {
         TextGroup_Size = TextGroup.gameObject.transform.childCount - 1;
         //print(TextGroup_Size);
+        LoadingText.SetActive(false);
     }
 
 	// Update is called once per frame
@@ -27,6 +29,8 @@ public class StoryScript : MonoBehaviour {
         if (cur_text_index == TextGroup_Size)
         {
             SceneManager.LoadScene("HelloAR");
+
+            LoadingText.SetActive(true);
         }
 
         TextGroup.gameObject.transform.GetChild(cur_text_index).gameObject.SetActive(false);
