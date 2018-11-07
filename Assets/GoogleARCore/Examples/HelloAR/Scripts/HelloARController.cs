@@ -66,6 +66,7 @@ namespace GoogleARCore.Examples.HelloAR
         public GameObject VRagentUI;
         public GameObject ClimbingUI;
         public GameObject ARPortalObject;
+        public GameObject JoystickUI;
 
         public Sprite ClimbingImage;
         public Sprite ClimbingImage2;
@@ -104,6 +105,7 @@ namespace GoogleARCore.Examples.HelloAR
         {
             VRagentUI.SetActive(false);
             ClimbingUI.SetActive(false);
+            JoystickUI.SetActive(false);
         }
 
         public void Update()
@@ -126,7 +128,6 @@ namespace GoogleARCore.Examples.HelloAR
                             NextButton();
                             TrackingStateOnce = true;
                         }
-
                         break;
                     }
                 }
@@ -165,7 +166,7 @@ namespace GoogleARCore.Examples.HelloAR
                         GameObject prefab;
                         if (hit.Trackable is FeaturePoint)
                         {
-                            //    prefab = AndyPointPrefab;
+                            // prefab = AndyPointPrefab;
                             prefab = AndyPlanePrefab;
                         }
                         else
@@ -288,15 +289,17 @@ namespace GoogleARCore.Examples.HelloAR
             else if (ClimbingCount == 20)
             {
                 NextButton();
-                // 거인 집 등장!!
+                
                 // 암전 이후 기존 녀석들 Destory 박고. AR portal 호출하자. 
                 //gameObject.GetComponent<UIFader>().FadeIn();
 
-                // Instantiate Andy model at the hit pose.
+                
                 GameObject _ARPortalObject = Instantiate(ARPortalObject, andyObject.transform.position, andyObject.transform.rotation);
+                // 거인 집 등장!!
 
                 Destroy(andyObject);
                 ClimbingUI.SetActive(false);
+                JoystickUI.SetActive(true);
 
             }
             else

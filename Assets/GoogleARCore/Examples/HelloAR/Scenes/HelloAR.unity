@@ -465,6 +465,7 @@ MonoBehaviour:
   ClimbingUI: {fileID: 1743818750}
   ARPortalObject: {fileID: 1130568495889502, guid: 20bb428b7ddd1c448858108f5764cdfd,
     type: 2}
+  JoystickUI: {fileID: 1201784460}
   ClimbingImage: {fileID: 21300000, guid: 847f39aae3f571743959f47e072bcbfa, type: 3}
   ClimbingImage2: {fileID: 21300000, guid: acef5aec9a1d547409ca283b5c357667, type: 3}
   Description:
@@ -882,6 +883,11 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 1201784457}
   m_Script: {fileID: 11500000, guid: cecce8d3f549de045bea5fd79de9e7cb, type: 3}
+--- !u!1 &1201784460 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1520218690450676, guid: 65b8d7b19fb3d8646931e6c2dca776f7,
+    type: 2}
+  m_PrefabInternal: {fileID: 1201784457}
 --- !u!1 &1233457656
 GameObject:
   m_ObjectHideFlags: 0
