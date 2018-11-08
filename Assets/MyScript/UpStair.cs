@@ -5,15 +5,22 @@ using UnityEngine;
 public class UpStair : MonoBehaviour {
 
     private GameObject ARportalObject;
-    public int level = 0;
+    private GameObject UserObject;
+    private GameObject movePoint1;
+    private GameObject movePoint2;
 
-    private GameObject TempObject;
-	// Use this for initialization
-	void Start () {
+    private int level = 1;
+
+    private Vector3 Difference_1;
+    private Vector3 Difference_2;
+
+    // Use this for initialization
+    void Start () {
         ARportalObject = GameObject.Find("ARPortalObject(Clone)");
-        TempObject = GameObject.Find("Temp");
-        // ARportalObject.transform.position -= TempObject.transform.position - ARportalObject.gameObject.transform.GetChild(0).transform.position;
-       
+        UserObject = Camera.main.gameObject;
+        movePoint1 = ARportalObject.gameObject.transform.GetChild(0).gameObject;
+        movePoint2 = ARportalObject.gameObject.transform.GetChild(1).gameObject;
+
     }
 	
 	// Update is called once per frame
@@ -24,17 +31,19 @@ public class UpStair : MonoBehaviour {
 
     public void stairTouch()
     {
-        //_ShowAndroidToastMessage("Stair");
-        // ARportalObject.gameObject.transform.GetChild(0).transform.position;  => movePoint
-        // ar - (movePoint - camera position)
-        if (level == 1)
+        if(level == 1)
         {
-            ARportalObject.transform.position -= new Vector3(1.5f, 0.8f, 0);
+            Difference_1 = movePoint1.transform.position - UserObject.transform.position;
+            ARportalObject.transform.position -= Difference_1;
+
+            level++;
         }
-        else if(level == 2)
+        else
         {
-            ARportalObject.transform.position -=
-                new Vector3(TempObject.transform.position.x - ARportalObject.gameObject.transform.GetChild(1).transform.position.x, ARportalObject.transform.position.y, TempObject.transform.position.z + ARportalObject.gameObject.transform.GetChild(1).transform.position.z);
+            Difference_2 = movePoint2.transform.position - UserObject.transform.position;
+            ARportalObject.transform.position -= Difference_2;
+
+            level = 1;
         }
         
     }
