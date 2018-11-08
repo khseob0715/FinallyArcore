@@ -19,7 +19,22 @@ public class GetGold : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       
+        if (Input.touchCount >= 1)
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit))
+            {
+                if (hit.collider.tag == "Gold")
+                {
+
+                    GameObject touchedObject = hit.transform.gameObject;
+
+                    TouchGold(touchedObject);
+                }
+            }
+        }
     }
 
     public void TouchGold(GameObject goldObject)
