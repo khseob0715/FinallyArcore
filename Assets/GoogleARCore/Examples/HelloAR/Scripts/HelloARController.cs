@@ -108,6 +108,7 @@ namespace GoogleARCore.Examples.HelloAR
             ClimbingUI.SetActive(false);
             JoystickUI.SetActive(false);
             GoldUI.SetActive(false);
+            NextButtonUI.SetActive(false);
         }
 
         public void Update()
@@ -127,7 +128,7 @@ namespace GoogleARCore.Examples.HelloAR
                         // showSearchingUI = false;
                         if (TrackingStateOnce == false)
                         {
-                            NextButton();
+                            //NextButton();
                             TrackingStateOnce = true;
                         }
                         break;
@@ -254,6 +255,21 @@ namespace GoogleARCore.Examples.HelloAR
                 VRagentUI.SetActive(true);
             }
             SearchingText.GetComponent<Text>().text = Description[Description_index];
+
+            if (Description_index == 9)
+            {
+                JoystickUI.SetActive(true);
+            }
+
+            if (ButtonShow[Description_index] == 1)
+            {
+                NextButtonUI.SetActive(true);
+            }
+            else
+            {
+                NextButtonUI.SetActive(false);
+            }
+
         }
 
 
@@ -301,7 +317,7 @@ namespace GoogleARCore.Examples.HelloAR
 
                 Destroy(andyObject);
                 ClimbingUI.SetActive(false);
-                JoystickUI.SetActive(true);
+                
 
             }
             else

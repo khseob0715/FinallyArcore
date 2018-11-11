@@ -8,11 +8,13 @@ public class UpStair : MonoBehaviour {
     private GameObject UserObject;
     private GameObject movePoint1;
     private GameObject movePoint2;
+    private GameObject movePoint3;
 
     private int level = 1;
 
     private Vector3 Difference_1;
     private Vector3 Difference_2;
+    private Vector3 Difference_3;
 
     // Use this for initialization
     void Start () {
@@ -20,6 +22,7 @@ public class UpStair : MonoBehaviour {
         UserObject = Camera.main.gameObject;
         movePoint1 = ARportalObject.gameObject.transform.GetChild(0).gameObject;
         movePoint2 = ARportalObject.gameObject.transform.GetChild(1).gameObject;
+        movePoint3 = ARportalObject.gameObject.transform.GetChild(2).gameObject;
 
     }
 	
@@ -31,18 +34,24 @@ public class UpStair : MonoBehaviour {
 
     public void stairTouch()
     {
-        if(level == 1)
+        if (level == 1)
         {
             Difference_1 = movePoint1.transform.position - UserObject.transform.position;
             ARportalObject.transform.position -= Difference_1;
 
             level++;
         }
-        else
+        else if (level == 2)
         {
             Difference_2 = movePoint2.transform.position - UserObject.transform.position;
             ARportalObject.transform.position -= Difference_2;
 
+            level++;
+        }
+        else
+        {
+            Difference_3 = movePoint3.transform.position - UserObject.transform.position;
+            ARportalObject.transform.position -= Difference_3;
             level = 1;
         }
         

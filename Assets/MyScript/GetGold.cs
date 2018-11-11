@@ -2,46 +2,72 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using GoogleARCore.Examples.HelloAR;
 
 public class GetGold : MonoBehaviour
 {
-    private GameObject GoldNumText;
-
-    private int getGoldNum = 0;
+    
+    public int getGoldNum = 0;
+    public LayerMask goldMask;
+    private GameObject Controller;
+    public GameObject StairJumpIcon;
+    public GameObject Barbarian;
+    public GameObject Barbarian2;
 
     // Use this for initialization
     void Start()
     {
-        GoldNumText = GameObject.Find("GoldText");
-        GoldNumText.SetActive(false);
+    
+        Controller = GameObject.Find("Example Controller");
+        StairJumpIcon.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.touchCount >= 1)
+        for (int i = 0; i < Input.touchCount; ++i)
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+            Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(i).position);
             RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit))
+            if (Physics.Raycast(ray, out hit, 100, goldMask))
             {
-                if (hit.collider.tag == "Gold")
-                {
 
-                    GameObject touchedObject = hit.transform.gameObject;
-
-                    TouchGold(touchedObject);
-                }
+                //_ShowAndroidToastMessage(hit.transform.name);
+                TouchGold(hit.transform.gameObject);
             }
         }
     }
 
     public void TouchGold(GameObject goldObject)
     {
-        GoldNumText.SetActive(false);
+        Controller.GetComponent<HelloARController>().GoldUI.SetActive(true);
         Destroy(goldObject);
         getGoldNum++;
-        GoldNumText.GetComponent<Text>().text = "x " + getGoldNum;
+        Controller.GetComponent<HelloARController>().GoldUI.transform.GetChild(0).GetComponent<Text>().text = "x " + getGoldNum;
+        if(getGoldNum == 14)
+        {
+            StairJumpIcon.SetActive(true);
+            Controller.GetComponent<HelloARController>().NextButton();
+            Barbarian.SetActive(false);
+            Barbarian2.SetActive(true);
+        }
+    }
+
+    private void _ShowAndroidToastMessage(string message)
+    {
+        AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+        AndroidJavaObject unityActivity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
+
+        if (unityActivity != null)
+        {
+            AndroidJavaClass toastClass = new AndroidJavaClass("android.widget.Toast");
+            unityActivity.Call("runOnUiThread", new AndroidJavaRunnable(() =>
+            {
+                AndroidJavaObject toastObject = toastClass.CallStatic<AndroidJavaObject>("makeText", unityActivity,
+                    message, 0);
+                toastObject.Call("show");
+            }));
+        }
     }
 }
