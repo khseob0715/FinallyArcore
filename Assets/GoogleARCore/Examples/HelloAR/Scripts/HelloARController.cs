@@ -109,6 +109,7 @@ namespace GoogleARCore.Examples.HelloAR
             JoystickUI.SetActive(false);
             GoldUI.SetActive(false);
             NextButtonUI.SetActive(false);
+            
         }
 
         public void Update()

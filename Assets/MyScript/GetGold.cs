@@ -14,12 +14,16 @@ public class GetGold : MonoBehaviour
     public GameObject Barbarian;
     public GameObject Barbarian2;
 
+    public GameObject Gate;
+    
+
     // Use this for initialization
     void Start()
     {
     
         Controller = GameObject.Find("Example Controller");
         StairJumpIcon.SetActive(false);
+        
     }
 
     // Update is called once per frame
@@ -51,6 +55,7 @@ public class GetGold : MonoBehaviour
             Controller.GetComponent<HelloARController>().NextButton();
             Barbarian.SetActive(false);
             Barbarian2.SetActive(true);
+            Gate.AddComponent<BoxCollider>();
         }
     }
 
